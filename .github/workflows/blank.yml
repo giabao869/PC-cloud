@@ -1,0 +1,24 @@
+name: Windows-11-PC
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Tai Ngrok
+        run: |
+          Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+          Expand-Archive ngrok.zip
+      - name: Bat RDP
+        run: |
+          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+      - name: Chay Ngrok
+        run: |
+          .\ngrok\ngrok.exe authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+          Start-Process .\ngrok\ngrok.exe -ArgumentList "tcp --region ap 3389"
+      - name: Doi ket noi
+        run: |
+          echo "Dang cho ket noi... PC se song trong 6 tieng."
+          sleep 21600
+          
