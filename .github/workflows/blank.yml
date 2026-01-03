@@ -1,4 +1,4 @@
-name: Windows-11-Virtual-PC
+name: Windows-11-Sieu-Toc
 on: workflow_dispatch
 
 jobs:
@@ -9,27 +9,18 @@ jobs:
         run: |
           Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
           Expand-Archive ngrok.zip
-          
-      - name: 2. Thiet lap Windows va Mat khau
+      - name: 2. Mo RDP va Dat Pass
         run: |
-          # Mo cong ket noi tu xa
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-          # Dat mat khau co dinh cho de vao
           net user RunnerAdmin BlackHub123 /add
           net localgroup administrators RunnerAdmin /add
-          
-      - name: 3. Kich hoat Token va Khoi chay
+      - name: 3. Chay Token cua Ong
         run: |
-          # Day la Token cua ong da duoc dan san
           .\ngrok\ngrok.exe authtoken "37jIpkhjZUlJ26OlOQZ9tYcd92r_brZPmcejx8Mi4SQ7BRHW"
           Start-Process .\ngrok\ngrok.exe -ArgumentList "tcp --region ap 3389"
-          
-      - name: 4. Dang cho ket noi
+      - name: 4. Doi ket noi
         run: |
-          echo "PC DA SAN SANG!"
-          echo "User: RunnerAdmin"
-          echo "Password: BlackHub123"
-          echo "Hay vao tab Actions -> Click vao log '3. Kich hoat Token' de lay IP Ngrok"
+          echo "DANG CHO KET NOI..."
           sleep 21600
           
